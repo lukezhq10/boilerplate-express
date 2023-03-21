@@ -24,10 +24,17 @@ app.get("/json", (req, res) => {
     }
 });
 
+// time server
 app.get('/now', function(req, res, next) {
     req.time = new Date().toString();
     next();
 }, function(req, res) {
     res.json({"time": req.time});
 });
+
+// echo server
+app.get('/:word/echo', (req, res) => {
+    res.json({"echo":req.params.word});
+});
+
 module.exports = app;
