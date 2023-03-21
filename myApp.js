@@ -5,11 +5,11 @@ let express = require('express');
 let app = express();
 console.log("Hello World");
 
-var middleware_logger = (req, res, next) => {
+var middlewareLogger = (req, res, next) => {
     console.log(req.method + " " + req.path + " - " + req.ip);
     next();
 };
-app.use(middleware_logger);
+app.use(middlewareLogger);
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/views/index.html");
@@ -36,5 +36,16 @@ app.get('/now', function(req, res, next) {
 app.get('/:word/echo', (req, res) => {
     res.json({"echo":req.params.word});
 });
+
+// get query parameter input from client
+app.route('/name')
+    .get((req, res) => {
+        var firstName = req.query.first;
+        var lastName = req.query.last;
+        res.json({"name": `${firstName} ${lastName}`});
+    })
+    .post((req, res) => {
+        res.json({"name": `${firstName} ${lastName}`});
+    });
 
 module.exports = app;
