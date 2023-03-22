@@ -1,4 +1,6 @@
-require('dotenv').config()
+require('dotenv').config();
+const bodyParser = require('body-parser');
+
 const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
 let express = require('express');
@@ -38,14 +40,24 @@ app.get('/:word/echo', (req, res) => {
 });
 
 // get query parameter input from client
-app.route('/name')
-    .get((req, res) => {
-        var firstName = req.query.first;
-        var lastName = req.query.last;
-        res.json({"name": `${firstName} ${lastName}`});
-    })
-    .post((req, res) => {
-        res.json({"name": `${firstName} ${lastName}`});
-    });
+// app.route('/name')
+//     .get((req, res) => {
+//         var firstName = req.query.first;
+//         var lastName = req.query.last;
+//         res.json({"name": `${firstName} ${lastName}`});
+//     })
+//     .post((req, res) => {
+//         res.json({"name": '{$firstName} {$lastName}'});
+//     });
+
+// Use body-parser to parse POST requests
+app.use(bodyParser.urlencoded({extended: false}));
+
+// get data from POST requests
+app.post('/name', (req, res) =>{
+    var firstName = req.body.first;
+    var lastName = req.body.last;
+    res.json({"name": firstName + " " + lastName});
+});
 
 module.exports = app;
